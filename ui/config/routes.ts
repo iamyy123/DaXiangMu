@@ -14,7 +14,6 @@ export default [
   {
     path: '/',
     name: '首页',
-    layout: false,
     component: './home/HomePage',
   },
   {
@@ -122,6 +121,36 @@ export default [
         component: './Tool/Gen/edit',
       },
     ]
+  },
+  {
+    name: 'crypto',
+    path: '/crypto',
+    routes: [
+      {
+        name: '系统概览',
+        path: '/crypto/overview',
+        component: './Crypto/Overview',
+      },
+      {
+        path: '/crypto',
+        redirect: '/crypto/overview',
+      },
+      {
+        name: '消息列表',
+        path: '/crypto/message',
+        component: './Crypto/Message',
+      },
+      {
+        name: '持仓数据',
+        path: '/crypto/position',
+        component: './Crypto/Position',
+      },
+      {
+        name: '建议报告',
+        path: '/crypto/report',
+        component: './Crypto/Report',
+      },
+    ],
   },
 
 ];

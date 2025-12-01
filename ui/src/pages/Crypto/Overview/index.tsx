@@ -1,15 +1,15 @@
 /**
- * 主页面 - 数字货币投资辅助系统
- * 直接显示系统概览内容
+ * 系统概览页
+ * 展示：未读消息数、待审核报告数、当前总资产估值
  */
 import { PageContainer } from '@ant-design/pro-components';
-import { Card, Row, Col, Statistic, Button } from 'antd';
+import { Card, Row, Col, Statistic, Button, Space } from 'antd';
 import { MessageOutlined, FileTextOutlined, DollarOutlined, ArrowRightOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import { useNavigate } from '@umijs/max';
 import { getOverview } from '@/services/crypto/overview';
 
-const HomePage: React.FC = () => {
+const Overview: React.FC = () => {
   const navigate = useNavigate();
   const [overviewData, setOverviewData] = useState({
     unreadMessageCount: 0,
@@ -36,7 +36,7 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <PageContainer title="AI驱动数字货币投资辅助系统">
+    <PageContainer title="系统概览">
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} lg={8}>
           <Card
@@ -157,4 +157,5 @@ const HomePage: React.FC = () => {
   );
 };
 
-export default HomePage;
+export default Overview;
+

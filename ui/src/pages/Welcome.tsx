@@ -1,163 +1,233 @@
-import { PageContainer } from '@ant-design/pro-components';
-import { useModel } from '@umijs/max';
-import { Card, theme } from 'antd';
 import React from 'react';
+import { useModel, Link } from '@umijs/max';
+import { Card, theme, Row, Col, Typography, Statistic } from 'antd';
+import { TrendingUpOutlined, PieChartOutlined, AlertOutlined } from '@ant-design/icons';
+// 从正确的包导入PageContainer
+import { PageContainer } from '@ant-design/pro-components';
+
+const { Title, Paragraph, Text } = Typography;
 
 /**
- * 每个单独的卡片，为了复用样式抽成了组件
- * @param param0
- * @returns
+ * 投资系统功能卡片组件
  */
-const InfoCard: React.FC<{
+interface InvestmentCardProps {
   title: string;
-  index: number;
-  desc: string;
+  icon: React.ReactNode;
+  description: string;
   href: string;
-}> = ({ title, href, index, desc }) => {
-  const { useToken } = theme;
+  color: string;
+  type?: 'primary' | 'default';
+}
 
-  const { token } = useToken();
+const InvestmentCard: React.FC<InvestmentCardProps> = ({
+  title = '',
+  icon = null,
+  description = '',
+  href = '/',
+  color = '#1890ff',
+  type = 'default',
+}) => {
+  const { token } = theme.useToken();
+  const renderIcon = icon || <AlertOutlined />;
 
   return (
-    <div
-      style={{
-        backgroundColor: token.colorBgContainer,
-        boxShadow: token.boxShadow,
-        borderRadius: '8px',
-        fontSize: '14px',
-        color: token.colorTextSecondary,
-        lineHeight: '22px',
-        padding: '16px 19px',
-        minWidth: '220px',
-        flex: 1,
-      }}
-    >
-      <div
+    <Link to={href} style={{ color: 'inherit', textDecoration: 'none', display: 'block', height: '100%' }}>
+      <Card
+        hoverable
+        bordered={false}
         style={{
+          height: '100%',
+          borderRadius: 12,
+          transition: 'all 0.3s ease',
+          boxShadow: type === 'primary'
+            ? `0 8px 20px rgba(0, 0, 0, 0.15)`
+            : '0 4px 12px rgba(0, 0, 0, 0.08)',
+          overflow: 'hidden',
+        }}
+        bodyStyle={{
+          padding: 24,
           display: 'flex',
-          gap: '4px',
-          alignItems: 'center',
+          flexDirection: 'column',
+          height: '100%',
         }}
       >
         <div
           style={{
-            width: 48,
-            height: 48,
-            lineHeight: '22px',
-            backgroundSize: '100%',
-            textAlign: 'center',
-            padding: '8px 16px 16px 12px',
-            color: '#FFF',
-            fontWeight: 'bold',
-            backgroundImage:
-              "url('https://gw.alipayobjects.com/zos/bmw-prod/daaf8d50-8e6d-4251-905d-676a24ddfa12.svg')",
+            width: 64,
+            height: 64,
+            borderRadius: 8,
+            backgroundColor: `${color}15`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: 16,
           }}
         >
-          {index}
+          <div style={{ color, fontSize: 28 }}>
+            {renderIcon}
+          </div>
         </div>
-        <div
-          style={{
-            fontSize: '16px',
-            color: token.colorText,
-            paddingBottom: 8,
-          }}
-        >
+        <Title level={4} style={{ margin: 0, marginBottom: 8, fontWeight: 600 }}>
           {title}
+        </Title>
+        <Paragraph
+          style={{
+            margin: 0,
+            color: token.colorTextSecondary,
+            fontSize: 14,
+            lineHeight: 1.6,
+            flex: 1,
+          }}
+        >
+          {description}
+        </Paragraph>
+        <div style={{ marginTop: 16 }}>
+          <Text
+            style={{
+              color,
+              fontSize: 14,
+              fontWeight: 500,
+            }}
+          >
+            立即开始 <TrendingUpOutlined style={{ fontSize: 12, marginLeft: 4 }} />
+          </Text>
         </div>
-      </div>
-      <div
-        style={{
-          fontSize: '14px',
-          color: token.colorTextSecondary,
-          textAlign: 'justify',
-          lineHeight: '22px',
-          marginBottom: 8,
-        }}
-      >
-        {desc}
-      </div>
-      <a href={href} target="_blank" rel="noreferrer">
-        了解更多 {'>'}
-      </a>
-    </div>
+      </Card>
+    </Link>
   );
 };
 
 const Welcome: React.FC = () => {
   const { token } = theme.useToken();
   const { initialState } = useModel('@@initialState');
+
+  // 修复：用三元表达式替代 || 语法，JSX 仅支持合法组件标签
+  const Container = PageContainer || 'div';
+
+  if (!initialState) {
+    return (
+      <div style={{ padding: 24, textAlign: 'center' }}>
+        <Text>加载中...</Text>
+      </div>
+    );
+  }
+
   return (
-    <PageContainer>
-      <Card
-        style={{
-          borderRadius: 8,
-        }}
-        bodyStyle={{
-          backgroundImage:
-            initialState?.settings?.navTheme === 'realDark'
-              ? 'background-image: linear-gradient(75deg, #1A1B1F 0%, #191C1F 100%)'
-              : 'background-image: linear-gradient(75deg, #FBFDFF 0%, #F5F7FF 100%)',
-        }}
-      >
-        <div
-          style={{
-            backgroundPosition: '100% -30%',
-            backgroundRepeat: 'no-repeat',
-            backgroundSize: '274px auto',
-            backgroundImage:
-              "url('https://gw.alipayobjects.com/mdn/rms_a9745b/afts/img/A*BuFmQqsB2iAAAAAAAAAAAAAAARQnAQ')",
-          }}
-        >
-          <div
+    // 正确写法：使用变量接收组件，再渲染
+    <Container>
+      <div style={{ padding: 24, backgroundColor: token.colorBgLayout }}>
+        {/* 页面标题区域 */}
+        <div style={{ marginBottom: 24, textAlign: 'center' }}>
+          <Title level={1} style={{ margin: 0, marginBottom: 8, fontWeight: 600 }}>
+            AI驱动数字货币投资辅助系统
+          </Title>
+          <Paragraph
             style={{
-              fontSize: '20px',
-              color: token.colorTextHeading,
-            }}
-          >
-            软3区1后端开发练习
-          </div>
-          <p
-            style={{
-              fontSize: '14px',
+              margin: 0,
               color: token.colorTextSecondary,
-              lineHeight: '22px',
-              marginTop: 16,
-              marginBottom: 32,
-              width: '65%',
+              fontSize: 16,
+              maxWidth: 800,
+              marginLeft: 'auto',
+              marginRight: 'auto',
             }}
           >
-           软3区1后端开发练习
-          </p>
-          <div
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: 16,
-            }}
-          >
-            <InfoCard
-              index={1}
-              href="https://umijs.org/docs/introduce/introduce"
-              title="了解 umi"
-              desc="umi 是一个可扩展的企业级前端应用框架,umi 以路由为基础的，同时支持配置式路由和约定式路由，保证路由的功能完备，并以此进行功能扩展。"
-            />
-            <InfoCard
-              index={2}
-              title="了解软3区1后端开发练习"
-              href="https://weilai.design"
-              desc="软3区1后端开发练习致力于让软件开发更快捷更安全更智能。"
-            />
-            <InfoCard
-              index={3}
-              title="了解软3区1后端开发练习"
-              href="https://weilai.com"
-              desc="软3区1后端开发练习致力于让软件开发更智能，更安全，更便捷。"
-            />
-          </div>
+            利用人工智能技术为您的数字货币投资决策提供数据支持和智能分析，助力您在波动的市场中把握机遇
+          </Paragraph>
         </div>
-      </Card>
-    </PageContainer>
+
+        {/* 统计卡片区域 */}
+        <Row gutter={[24, 24]} style={{ marginBottom: 32 }}>
+          <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+            <Card
+              bordered={false}
+              style={{
+                borderRadius: 12,
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
+              }}
+              bodyStyle={{ padding: 24 }}
+            >
+              <Statistic
+                title="市场监控币种数"
+                value={156}
+                suffix="种"
+                valueStyle={{ color: '#1890ff' }}
+                prefix={<TrendingUpOutlined />}
+              />
+            </Card>
+          </Col>
+          <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+            <Card
+              bordered={false}
+              style={{
+                borderRadius: 12,
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
+              }}
+              bodyStyle={{ padding: 24 }}
+            >
+              <Statistic
+                title="AI分析准确率"
+                value={87.6}
+                suffix="%"
+                valueStyle={{ color: '#52c41a' }}
+                prefix={<AlertOutlined />}
+              />
+            </Card>
+          </Col>
+          <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+            <Card
+              bordered={false}
+              style={{
+                borderRadius: 12,
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
+              }}
+              bodyStyle={{ padding: 24 }}
+            >
+              <Statistic
+                title="用户投资组合数"
+                value={2583}
+                suffix="个"
+                valueStyle={{ color: '#faad14' }}
+                prefix={<PieChartOutlined />}
+              />
+            </Card>
+          </Col>
+        </Row>
+
+        {/* 核心功能区域 */}
+        <Row gutter={[24, 24]}>
+          <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+            <InvestmentCard
+              title="AI驱动分析系统"
+              icon={<AlertOutlined />}
+              description="通过机器学习算法分析市场趋势，识别潜在投资机会，提供智能预警和风险评估"
+              href="/crypto/analysis"
+              color="#1890ff"
+              type="primary"
+            />
+          </Col>
+          <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+            <InvestmentCard
+              title="投资组合管理"
+              icon={<PieChartOutlined />}
+              description="管理您的数字货币投资组合，追踪持仓表现，分析盈亏状况，优化资产配置"
+              href="/crypto/position"
+              color="#52c41a"
+              type="primary"
+            />
+          </Col>
+        </Row>
+
+        {/* 底部区域 */}
+        <div style={{ marginTop: 48, paddingTop: 24, borderTop: `1px solid ${token.colorBorder}` }}>
+          <Paragraph style={{ textAlign: 'center', color: token.colorTextSecondary, fontSize: 14 }}>
+            AI驱动数字货币投资辅助系统 - 为您的投资决策提供智能支持
+          </Paragraph>
+        </div>
+      </div>
+    </Container>
   );
 };
 
+// 导出组件（兼容默认导入和命名导入）
 export default Welcome;
+export { InvestmentCard };

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.CryptoMessageMapper">
+    
+    <resultMap type="CryptoMessage" id="CryptoMessageResult">
+        <result property="id"    column="id"    />
+        <result property="coinType"    column="coin_type"    />
+        <result property="title"    column="title"    />
+        <result property="content"    column="content"    />
+        <result property="source"    column="source"    />
+        <result property="sourceUrl"    column="source_url"    />
+        <result property="sentiment"    column="sentiment"    />
+        <result property="impactLevel"    column="impact_level"    />
+        <result property="analysisResult"    column="analysis_result"    />
+        <result property="collectTime"    column="collect_time"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectCryptoMessageVo">
+        select id, coin_type, title, content, source, source_url, sentiment, impact_level, analysis_result, collect_time, create_time, update_time, status from crypto_message
+    </sql>
+
+    <select id="selectCryptoMessageList" parameterType="CryptoMessage" resultMap="CryptoMessageResult">
+        <include refid="selectCryptoMessageVo"/>
+        <where>  
+            <if test="coinType != null  and coinType != ''"> and coin_type = #{coinType}</if>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="source != null  and source != ''"> and source = #{source}</if>
+            <if test="sourceUrl != null  and sourceUrl != ''"> and source_url = #{sourceUrl}</if>
+            <if test="sentiment != null  and sentiment != ''"> and sentiment = #{sentiment}</if>
+            <if test="impactLevel != null "> and impact_level = #{impactLevel}</if>
+            <if test="analysisResult != null  and analysisResult != ''"> and analysis_result = #{analysisResult}</if>
+            <if test="collectTime != null "> and collect_time = #{collectTime}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectCryptoMessageById" parameterType="Long" resultMap="CryptoMessageResult">
+        <include refid="selectCryptoMessageVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCryptoMessage" parameterType="CryptoMessage" useGeneratedKeys="true" keyProperty="id">
+        insert into crypto_message
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="coinType != null and coinType != ''">coin_type,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="content != null">content,</if>
+            <if test="source != null">source,</if>
+            <if test="sourceUrl != null">source_url,</if>
+            <if test="sentiment != null">sentiment,</if>
+            <if test="impactLevel != null">impact_level,</if>
+            <if test="analysisResult != null">analysis_result,</if>
+            <if test="collectTime != null">collect_time,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="status != null">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="coinType != null and coinType != ''">#{coinType},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="content != null">#{content},</if>
+            <if test="source != null">#{source},</if>
+            <if test="sourceUrl != null">#{sourceUrl},</if>
+            <if test="sentiment != null">#{sentiment},</if>
+            <if test="impactLevel != null">#{impactLevel},</if>
+            <if test="analysisResult != null">#{analysisResult},</if>
+            <if test="collectTime != null">#{collectTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="status != null">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCryptoMessage" parameterType="CryptoMessage">
+        update crypto_message
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="coinType != null and coinType != ''">coin_type = #{coinType},</if>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="source != null">source = #{source},</if>
+            <if test="sourceUrl != null">source_url = #{sourceUrl},</if>
+            <if test="sentiment != null">sentiment = #{sentiment},</if>
+            <if test="impactLevel != null">impact_level = #{impactLevel},</if>
+            <if test="analysisResult != null">analysis_result = #{analysisResult},</if>
+            <if test="collectTime != null">collect_time = #{collectTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCryptoMessageById" parameterType="Long">
+        delete from crypto_message where id = #{id}
+    </delete>
+
+    <delete id="deleteCryptoMessageByIds" parameterType="String">
+        delete from crypto_message where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

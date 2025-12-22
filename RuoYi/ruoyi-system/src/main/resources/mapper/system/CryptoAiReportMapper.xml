@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.CryptoAiReportMapper">
+    
+    <resultMap type="CryptoAiReport" id="CryptoAiReportResult">
+        <result property="id"    column="id"    />
+        <result property="messageId"    column="message_id"    />
+        <result property="reportDate"    column="report_date"    />
+        <result property="firstAnalysis"    column="first_analysis"    />
+        <result property="positionSnapshot"    column="position_snapshot"    />
+        <result property="secondAnalysis"    column="second_analysis"    />
+        <result property="adjustmentSuggestion"    column="adjustment_suggestion"    />
+        <result property="analysisBasis"    column="analysis_basis"    />
+        <result property="reportStatus"    column="report_status"    />
+        <result property="reviewerId"    column="reviewer_id"    />
+        <result property="reviewTime"    column="review_time"    />
+        <result property="rejectReason"    column="reject_reason"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectCryptoAiReportVo">
+        select id, message_id, report_date, first_analysis, position_snapshot, second_analysis, adjustment_suggestion, analysis_basis, report_status, reviewer_id, review_time, reject_reason, create_time, update_time from crypto_ai_report
+    </sql>
+
+    <select id="selectCryptoAiReportList" parameterType="CryptoAiReport" resultMap="CryptoAiReportResult">
+        <include refid="selectCryptoAiReportVo"/>
+        <where>  
+            <if test="messageId != null "> and message_id = #{messageId}</if>
+            <if test="reportDate != null "> and report_date = #{reportDate}</if>
+            <if test="firstAnalysis != null  and firstAnalysis != ''"> and first_analysis = #{firstAnalysis}</if>
+            <if test="positionSnapshot != null  and positionSnapshot != ''"> and position_snapshot = #{positionSnapshot}</if>
+            <if test="secondAnalysis != null  and secondAnalysis != ''"> and second_analysis = #{secondAnalysis}</if>
+            <if test="adjustmentSuggestion != null  and adjustmentSuggestion != ''"> and adjustment_suggestion = #{adjustmentSuggestion}</if>
+            <if test="analysisBasis != null  and analysisBasis != ''"> and analysis_basis = #{analysisBasis}</if>
+            <if test="reportStatus != null  and reportStatus != ''"> and report_status = #{reportStatus}</if>
+            <if test="reviewerId != null "> and reviewer_id = #{reviewerId}</if>
+            <if test="reviewTime != null "> and review_time = #{reviewTime}</if>
+            <if test="rejectReason != null  and rejectReason != ''"> and reject_reason = #{rejectReason}</if>
+        </where>
+    </select>
+    
+    <select id="selectCryptoAiReportById" parameterType="Long" resultMap="CryptoAiReportResult">
+        <include refid="selectCryptoAiReportVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCryptoAiReport" parameterType="CryptoAiReport" useGeneratedKeys="true" keyProperty="id">
+        insert into crypto_ai_report
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="messageId != null">message_id,</if>
+            <if test="reportDate != null">report_date,</if>
+            <if test="firstAnalysis != null">first_analysis,</if>
+            <if test="positionSnapshot != null">position_snapshot,</if>
+            <if test="secondAnalysis != null">second_analysis,</if>
+            <if test="adjustmentSuggestion != null">adjustment_suggestion,</if>
+            <if test="analysisBasis != null">analysis_basis,</if>
+            <if test="reportStatus != null">report_status,</if>
+            <if test="reviewerId != null">reviewer_id,</if>
+            <if test="reviewTime != null">review_time,</if>
+            <if test="rejectReason != null">reject_reason,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="messageId != null">#{messageId},</if>
+            <if test="reportDate != null">#{reportDate},</if>
+            <if test="firstAnalysis != null">#{firstAnalysis},</if>
+            <if test="positionSnapshot != null">#{positionSnapshot},</if>
+            <if test="secondAnalysis != null">#{secondAnalysis},</if>
+            <if test="adjustmentSuggestion != null">#{adjustmentSuggestion},</if>
+            <if test="analysisBasis != null">#{analysisBasis},</if>
+            <if test="reportStatus != null">#{reportStatus},</if>
+            <if test="reviewerId != null">#{reviewerId},</if>
+            <if test="reviewTime != null">#{reviewTime},</if>
+            <if test="rejectReason != null">#{rejectReason},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCryptoAiReport" parameterType="CryptoAiReport">
+        update crypto_ai_report
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="messageId != null">message_id = #{messageId},</if>
+            <if test="reportDate != null">report_date = #{reportDate},</if>
+            <if test="firstAnalysis != null">first_analysis = #{firstAnalysis},</if>
+            <if test="positionSnapshot != null">position_snapshot = #{positionSnapshot},</if>
+            <if test="secondAnalysis != null">second_analysis = #{secondAnalysis},</if>
+            <if test="adjustmentSuggestion != null">adjustment_suggestion = #{adjustmentSuggestion},</if>
+            <if test="analysisBasis != null">analysis_basis = #{analysisBasis},</if>
+            <if test="reportStatus != null">report_status = #{reportStatus},</if>
+            <if test="reviewerId != null">reviewer_id = #{reviewerId},</if>
+            <if test="reviewTime != null">review_time = #{reviewTime},</if>
+            <if test="rejectReason != null">reject_reason = #{rejectReason},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCryptoAiReportById" parameterType="Long">
+        delete from crypto_ai_report where id = #{id}
+    </delete>
+
+    <delete id="deleteCryptoAiReportByIds" parameterType="String">
+        delete from crypto_ai_report where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

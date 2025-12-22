@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.CryptoPositionMapper">
+    
+    <resultMap type="CryptoPosition" id="CryptoPositionResult">
+        <result property="id"    column="id"    />
+        <result property="coinType"    column="coin_type"    />
+        <result property="amount"    column="amount"    />
+        <result property="percentage"    column="percentage"    />
+        <result property="usdValue"    column="usd_value"    />
+        <result property="price"    column="price"    />
+        <result property="snapshotDate"    column="snapshot_date"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectCryptoPositionVo">
+        select id, coin_type, amount, percentage, usd_value, price, snapshot_date, create_time, update_time from crypto_position
+    </sql>
+
+    <select id="selectCryptoPositionList" parameterType="CryptoPosition" resultMap="CryptoPositionResult">
+        <include refid="selectCryptoPositionVo"/>
+        <where>  
+            <if test="coinType != null  and coinType != ''"> and coin_type = #{coinType}</if>
+            <if test="amount != null "> and amount = #{amount}</if>
+            <if test="percentage != null "> and percentage = #{percentage}</if>
+            <if test="usdValue != null "> and usd_value = #{usdValue}</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="snapshotDate != null "> and snapshot_date = #{snapshotDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectCryptoPositionById" parameterType="Long" resultMap="CryptoPositionResult">
+        <include refid="selectCryptoPositionVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCryptoPosition" parameterType="CryptoPosition" useGeneratedKeys="true" keyProperty="id">
+        insert into crypto_position
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="coinType != null and coinType != ''">coin_type,</if>
+            <if test="amount != null">amount,</if>
+            <if test="percentage != null">percentage,</if>
+            <if test="usdValue != null">usd_value,</if>
+            <if test="price != null">price,</if>
+            <if test="snapshotDate != null">snapshot_date,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="coinType != null and coinType != ''">#{coinType},</if>
+            <if test="amount != null">#{amount},</if>
+            <if test="percentage != null">#{percentage},</if>
+            <if test="usdValue != null">#{usdValue},</if>
+            <if test="price != null">#{price},</if>
+            <if test="snapshotDate != null">#{snapshotDate},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCryptoPosition" parameterType="CryptoPosition">
+        update crypto_position
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="coinType != null and coinType != ''">coin_type = #{coinType},</if>
+            <if test="amount != null">amount = #{amount},</if>
+            <if test="percentage != null">percentage = #{percentage},</if>
+            <if test="usdValue != null">usd_value = #{usdValue},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="snapshotDate != null">snapshot_date = #{snapshotDate},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCryptoPositionById" parameterType="Long">
+        delete from crypto_position where id = #{id}
+    </delete>
+
+    <delete id="deleteCryptoPositionByIds" parameterType="String">
+        delete from crypto_position where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

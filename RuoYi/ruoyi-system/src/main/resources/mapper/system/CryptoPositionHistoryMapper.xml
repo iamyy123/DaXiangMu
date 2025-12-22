@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.CryptoPositionHistoryMapper">
+    
+    <resultMap type="CryptoPositionHistory" id="CryptoPositionHistoryResult">
+        <result property="id"    column="id"    />
+        <result property="coinType"    column="coin_type"    />
+        <result property="amount"    column="amount"    />
+        <result property="percentage"    column="percentage"    />
+        <result property="usdValue"    column="usd_value"    />
+        <result property="price"    column="price"    />
+        <result property="changeType"    column="change_type"    />
+        <result property="changeReason"    column="change_reason"    />
+        <result property="snapshotDate"    column="snapshot_date"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectCryptoPositionHistoryVo">
+        select id, coin_type, amount, percentage, usd_value, price, change_type, change_reason, snapshot_date, create_time from crypto_position_history
+    </sql>
+
+    <select id="selectCryptoPositionHistoryList" parameterType="CryptoPositionHistory" resultMap="CryptoPositionHistoryResult">
+        <include refid="selectCryptoPositionHistoryVo"/>
+        <where>  
+            <if test="coinType != null  and coinType != ''"> and coin_type = #{coinType}</if>
+            <if test="amount != null "> and amount = #{amount}</if>
+            <if test="percentage != null "> and percentage = #{percentage}</if>
+            <if test="usdValue != null "> and usd_value = #{usdValue}</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="changeType != null  and changeType != ''"> and change_type = #{changeType}</if>
+            <if test="changeReason != null  and changeReason != ''"> and change_reason = #{changeReason}</if>
+            <if test="snapshotDate != null "> and snapshot_date = #{snapshotDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectCryptoPositionHistoryById" parameterType="Long" resultMap="CryptoPositionHistoryResult">
+        <include refid="selectCryptoPositionHistoryVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCryptoPositionHistory" parameterType="CryptoPositionHistory" useGeneratedKeys="true" keyProperty="id">
+        insert into crypto_position_history
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="coinType != null and coinType != ''">coin_type,</if>
+            <if test="amount != null">amount,</if>
+            <if test="percentage != null">percentage,</if>
+            <if test="usdValue != null">usd_value,</if>
+            <if test="price != null">price,</if>
+            <if test="changeType != null">change_type,</if>
+            <if test="changeReason != null">change_reason,</if>
+            <if test="snapshotDate != null">snapshot_date,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="coinType != null and coinType != ''">#{coinType},</if>
+            <if test="amount != null">#{amount},</if>
+            <if test="percentage != null">#{percentage},</if>
+            <if test="usdValue != null">#{usdValue},</if>
+            <if test="price != null">#{price},</if>
+            <if test="changeType != null">#{changeType},</if>
+            <if test="changeReason != null">#{changeReason},</if>
+            <if test="snapshotDate != null">#{snapshotDate},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCryptoPositionHistory" parameterType="CryptoPositionHistory">
+        update crypto_position_history
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="coinType != null and coinType != ''">coin_type = #{coinType},</if>
+            <if test="amount != null">amount = #{amount},</if>
+            <if test="percentage != null">percentage = #{percentage},</if>
+            <if test="usdValue != null">usd_value = #{usdValue},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="changeType != null">change_type = #{changeType},</if>
+            <if test="changeReason != null">change_reason = #{changeReason},</if>
+            <if test="snapshotDate != null">snapshot_date = #{snapshotDate},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCryptoPositionHistoryById" parameterType="Long">
+        delete from crypto_position_history where id = #{id}
+    </delete>
+
+    <delete id="deleteCryptoPositionHistoryByIds" parameterType="String">
+        delete from crypto_position_history where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

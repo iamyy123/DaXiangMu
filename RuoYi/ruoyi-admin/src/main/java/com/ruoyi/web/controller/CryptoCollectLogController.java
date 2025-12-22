@@ -23,21 +23,22 @@ import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
  * 消息采集任务日志Controller
- * 
+ *
  * @author ruoyi
  * @date 2025-12-19
  */
 @RestController
-@RequestMapping("/system/log")
+// 关键修改：将 /system/log 改为 /system/collectLog（避免与 CryptoReviewLogController 冲突）
+@RequestMapping("/system/collectLog")
 public class CryptoCollectLogController extends BaseController
 {
     @Autowired
     private ICryptoCollectLogService cryptoCollectLogService;
 
     /**
-     * 查询消息采集任务日志列表
+     * 查询消息采集任务日志列表 → 路径变为：GET /system/collectLog/list
      */
-    @PreAuthorize("@ss.hasPermi('system:log:list')")
+    @PreAuthorize("@ss.hasPermi('system:collectLog:list')")
     @GetMapping("/list")
     public TableDataInfo list(CryptoCollectLog cryptoCollectLog)
     {
@@ -47,9 +48,9 @@ public class CryptoCollectLogController extends BaseController
     }
 
     /**
-     * 导出消息采集任务日志列表
+     * 导出消息采集任务日志列表 → 路径变为：POST /system/collectLog/export
      */
-    @PreAuthorize("@ss.hasPermi('system:log:export')")
+    @PreAuthorize("@ss.hasPermi('system:collectLog:export')")
     @Log(title = "消息采集任务日志", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, CryptoCollectLog cryptoCollectLog)
@@ -60,9 +61,9 @@ public class CryptoCollectLogController extends BaseController
     }
 
     /**
-     * 获取消息采集任务日志详细信息
+     * 获取消息采集任务日志详细信息 → 路径变为：GET /system/collectLog/{id}
      */
-    @PreAuthorize("@ss.hasPermi('system:log:query')")
+    @PreAuthorize("@ss.hasPermi('system:collectLog:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
@@ -70,9 +71,9 @@ public class CryptoCollectLogController extends BaseController
     }
 
     /**
-     * 新增消息采集任务日志
+     * 新增消息采集任务日志 → 路径变为：POST /system/collectLog（不再与另一个 Controller 冲突）
      */
-    @PreAuthorize("@ss.hasPermi('system:log:add')")
+    @PreAuthorize("@ss.hasPermi('system:collectLog:add')")
     @Log(title = "消息采集任务日志", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody CryptoCollectLog cryptoCollectLog)
@@ -81,9 +82,9 @@ public class CryptoCollectLogController extends BaseController
     }
 
     /**
-     * 修改消息采集任务日志
+     * 修改消息采集任务日志 → 路径变为：PUT /system/collectLog
      */
-    @PreAuthorize("@ss.hasPermi('system:log:edit')")
+    @PreAuthorize("@ss.hasPermi('system:collectLog:edit')")
     @Log(title = "消息采集任务日志", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody CryptoCollectLog cryptoCollectLog)
@@ -92,11 +93,11 @@ public class CryptoCollectLogController extends BaseController
     }
 
     /**
-     * 删除消息采集任务日志
+     * 删除消息采集任务日志 → 路径变为：DELETE /system/collectLog/{ids}
      */
-    @PreAuthorize("@ss.hasPermi('system:log:remove')")
+    @PreAuthorize("@ss.hasPermi('system:collectLog:remove')")
     @Log(title = "消息采集任务日志", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{ids}")
+    @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {
         return toAjax(cryptoCollectLogService.deleteCryptoCollectLogByIds(ids));

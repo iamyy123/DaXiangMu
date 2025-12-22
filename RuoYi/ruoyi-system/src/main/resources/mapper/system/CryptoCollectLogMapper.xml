@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.CryptoCollectLogMapper">
+    
+    <resultMap type="CryptoCollectLog" id="CryptoCollectLogResult">
+        <result property="id"    column="id"    />
+        <result property="taskDate"    column="task_date"    />
+        <result property="collectStatus"    column="collect_status"    />
+        <result property="messageCount"    column="message_count"    />
+        <result property="errorMessage"    column="error_message"    />
+        <result property="retryCount"    column="retry_count"    />
+        <result property="executeTime"    column="execute_time"    />
+        <result property="duration"    column="duration"    />
+    </resultMap>
+
+    <sql id="selectCryptoCollectLogVo">
+        select id, task_date, collect_status, message_count, error_message, retry_count, execute_time, duration from crypto_collect_log
+    </sql>
+
+    <select id="selectCryptoCollectLogList" parameterType="CryptoCollectLog" resultMap="CryptoCollectLogResult">
+        <include refid="selectCryptoCollectLogVo"/>
+        <where>  
+            <if test="taskDate != null "> and task_date = #{taskDate}</if>
+            <if test="collectStatus != null  and collectStatus != ''"> and collect_status = #{collectStatus}</if>
+            <if test="messageCount != null "> and message_count = #{messageCount}</if>
+            <if test="errorMessage != null  and errorMessage != ''"> and error_message = #{errorMessage}</if>
+            <if test="retryCount != null "> and retry_count = #{retryCount}</if>
+            <if test="executeTime != null "> and execute_time = #{executeTime}</if>
+            <if test="duration != null "> and duration = #{duration}</if>
+        </where>
+    </select>
+    
+    <select id="selectCryptoCollectLogById" parameterType="Long" resultMap="CryptoCollectLogResult">
+        <include refid="selectCryptoCollectLogVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCryptoCollectLog" parameterType="CryptoCollectLog" useGeneratedKeys="true" keyProperty="id">
+        insert into crypto_collect_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="taskDate != null">task_date,</if>
+            <if test="collectStatus != null and collectStatus != ''">collect_status,</if>
+            <if test="messageCount != null">message_count,</if>
+            <if test="errorMessage != null">error_message,</if>
+            <if test="retryCount != null">retry_count,</if>
+            <if test="executeTime != null">execute_time,</if>
+            <if test="duration != null">duration,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="taskDate != null">#{taskDate},</if>
+            <if test="collectStatus != null and collectStatus != ''">#{collectStatus},</if>
+            <if test="messageCount != null">#{messageCount},</if>
+            <if test="errorMessage != null">#{errorMessage},</if>
+            <if test="retryCount != null">#{retryCount},</if>
+            <if test="executeTime != null">#{executeTime},</if>
+            <if test="duration != null">#{duration},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCryptoCollectLog" parameterType="CryptoCollectLog">
+        update crypto_collect_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="taskDate != null">task_date = #{taskDate},</if>
+            <if test="collectStatus != null and collectStatus != ''">collect_status = #{collectStatus},</if>
+            <if test="messageCount != null">message_count = #{messageCount},</if>
+            <if test="errorMessage != null">error_message = #{errorMessage},</if>
+            <if test="retryCount != null">retry_count = #{retryCount},</if>
+            <if test="executeTime != null">execute_time = #{executeTime},</if>
+            <if test="duration != null">duration = #{duration},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCryptoCollectLogById" parameterType="Long">
+        delete from crypto_collect_log where id = #{id}
+    </delete>
+
+    <delete id="deleteCryptoCollectLogByIds" parameterType="String">
+        delete from crypto_collect_log where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

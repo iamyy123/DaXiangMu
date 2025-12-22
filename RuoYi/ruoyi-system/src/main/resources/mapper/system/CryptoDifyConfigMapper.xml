@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.CryptoDifyConfigMapper">
+    
+    <resultMap type="CryptoDifyConfig" id="CryptoDifyConfigResult">
+        <result property="id"    column="id"    />
+        <result property="configKey"    column="config_key"    />
+        <result property="configValue"    column="config_value"    />
+        <result property="configType"    column="config_type"    />
+        <result property="description"    column="description"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectCryptoDifyConfigVo">
+        select id, config_key, config_value, config_type, description, create_time, update_time from crypto_dify_config
+    </sql>
+
+    <select id="selectCryptoDifyConfigList" parameterType="CryptoDifyConfig" resultMap="CryptoDifyConfigResult">
+        <include refid="selectCryptoDifyConfigVo"/>
+        <where>  
+            <if test="configKey != null  and configKey != ''"> and config_key = #{configKey}</if>
+            <if test="configValue != null  and configValue != ''"> and config_value = #{configValue}</if>
+            <if test="configType != null  and configType != ''"> and config_type = #{configType}</if>
+            <if test="description != null  and description != ''"> and description = #{description}</if>
+        </where>
+    </select>
+    
+    <select id="selectCryptoDifyConfigById" parameterType="Long" resultMap="CryptoDifyConfigResult">
+        <include refid="selectCryptoDifyConfigVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCryptoDifyConfig" parameterType="CryptoDifyConfig" useGeneratedKeys="true" keyProperty="id">
+        insert into crypto_dify_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="configKey != null and configKey != ''">config_key,</if>
+            <if test="configValue != null">config_value,</if>
+            <if test="configType != null">config_type,</if>
+            <if test="description != null">description,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="configKey != null and configKey != ''">#{configKey},</if>
+            <if test="configValue != null">#{configValue},</if>
+            <if test="configType != null">#{configType},</if>
+            <if test="description != null">#{description},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCryptoDifyConfig" parameterType="CryptoDifyConfig">
+        update crypto_dify_config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="configKey != null and configKey != ''">config_key = #{configKey},</if>
+            <if test="configValue != null">config_value = #{configValue},</if>
+            <if test="configType != null">config_type = #{configType},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCryptoDifyConfigById" parameterType="Long">
+        delete from crypto_dify_config where id = #{id}
+    </delete>
+
+    <delete id="deleteCryptoDifyConfigByIds" parameterType="String">
+        delete from crypto_dify_config where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.CryptoReviewLogMapper">
+    
+    <resultMap type="CryptoReviewLog" id="CryptoReviewLogResult">
+        <result property="id"    column="id"    />
+        <result property="reportId"    column="report_id"    />
+        <result property="reviewerId"    column="reviewer_id"    />
+        <result property="reviewerName"    column="reviewer_name"    />
+        <result property="reviewResult"    column="review_result"    />
+        <result property="reviewComment"    column="review_comment"    />
+        <result property="reviewTime"    column="review_time"    />
+    </resultMap>
+
+    <sql id="selectCryptoReviewLogVo">
+        select id, report_id, reviewer_id, reviewer_name, review_result, review_comment, review_time from crypto_review_log
+    </sql>
+
+    <select id="selectCryptoReviewLogList" parameterType="CryptoReviewLog" resultMap="CryptoReviewLogResult">
+        <include refid="selectCryptoReviewLogVo"/>
+        <where>  
+            <if test="reportId != null "> and report_id = #{reportId}</if>
+            <if test="reviewerId != null "> and reviewer_id = #{reviewerId}</if>
+            <if test="reviewerName != null  and reviewerName != ''"> and reviewer_name like concat('%', #{reviewerName}, '%')</if>
+            <if test="reviewResult != null  and reviewResult != ''"> and review_result = #{reviewResult}</if>
+            <if test="reviewComment != null  and reviewComment != ''"> and review_comment = #{reviewComment}</if>
+            <if test="reviewTime != null "> and review_time = #{reviewTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectCryptoReviewLogById" parameterType="Long" resultMap="CryptoReviewLogResult">
+        <include refid="selectCryptoReviewLogVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCryptoReviewLog" parameterType="CryptoReviewLog" useGeneratedKeys="true" keyProperty="id">
+        insert into crypto_review_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="reportId != null">report_id,</if>
+            <if test="reviewerId != null">reviewer_id,</if>
+            <if test="reviewerName != null">reviewer_name,</if>
+            <if test="reviewResult != null and reviewResult != ''">review_result,</if>
+            <if test="reviewComment != null">review_comment,</if>
+            <if test="reviewTime != null">review_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="reportId != null">#{reportId},</if>
+            <if test="reviewerId != null">#{reviewerId},</if>
+            <if test="reviewerName != null">#{reviewerName},</if>
+            <if test="reviewResult != null and reviewResult != ''">#{reviewResult},</if>
+            <if test="reviewComment != null">#{reviewComment},</if>
+            <if test="reviewTime != null">#{reviewTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCryptoReviewLog" parameterType="CryptoReviewLog">
+        update crypto_review_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="reportId != null">report_id = #{reportId},</if>
+            <if test="reviewerId != null">reviewer_id = #{reviewerId},</if>
+            <if test="reviewerName != null">reviewer_name = #{reviewerName},</if>
+            <if test="reviewResult != null and reviewResult != ''">review_result = #{reviewResult},</if>
+            <if test="reviewComment != null">review_comment = #{reviewComment},</if>
+            <if test="reviewTime != null">review_time = #{reviewTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCryptoReviewLogById" parameterType="Long">
+        delete from crypto_review_log where id = #{id}
+    </delete>
+
+    <delete id="deleteCryptoReviewLogByIds" parameterType="String">
+        delete from crypto_review_log where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

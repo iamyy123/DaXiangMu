@@ -56,6 +56,13 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- JSON库 -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20231013</version>
+        </dependency>
+
         <!-- skywalking 整合 logback -->
 <!--        <dependency>-->
 <!--            <groupId>org.apache.skywalking</groupId>-->
@@ -84,6 +91,9 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <mainClass>com.ruoyi.RuoYiApplication</mainClass>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
